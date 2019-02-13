@@ -5,9 +5,11 @@ export default gql`
   extend type Query {
     me: User
     users: [User!]!
+    isSignIn: Boolean
   }
   extend type Mutation {
     signUp(email: String!, name: String!, mobile: String, password: String!): Boolean
+    addMoreInfo(address: ID!): Boolean
     signIn(email: String!, password: String!): Boolean
     signOut: Boolean
     confirmEmail(key: String): Boolean
@@ -18,7 +20,6 @@ export default gql`
     name: String
     mobile: String
     address: Address
-    birthday: Date
     messages: [Message]
     orders: [Order]
     cart: [Cart]

@@ -12,18 +12,21 @@ export default {
     }
   },
   Query: {
+    product: (_, { name }, context, info) => {
+      return Product.findOne({ name: name })
+    },
     products: (root, args, context, info) => {
       // TODO: auth, projection, pagination
       return Product.find({})
     },
-    product: (root, { id }, context, info) => {
+    productByCategory: (root, { categoryId }, context, info) => {
       // TODO: auth, projection, sanitization
 
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new UserInputError(`${id} is not a valid user ID.`)
-      }
+      // if (!mongoose.Types.ObjectId.isValid(id)) {
+      //   throw new UserInputError(`${id} is not a valid user ID.`)
+      // }
 
-      return Product.findById(id)
+      return Product.find({ categoryId: categoryId })
     }
 
   },

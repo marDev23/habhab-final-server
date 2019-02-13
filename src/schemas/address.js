@@ -5,5 +5,6 @@ export default Joi.object().keys({
   municipal: Joi.string().required().label('product code'),
   baranggay: Joi.string().required().label('category id'),
   zip: Joi.number().required().label('zip code'),
-  fee: Joi.number().required().label('shpment fee')
+  fee: Joi.number().required().label('shipment fee'),
+  isPickUpAvailable: Joi.boolean().required().label('available for pick-up')
 })

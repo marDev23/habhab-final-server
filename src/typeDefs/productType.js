@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express'
 
 export default gql`
   extend type Query {
-    productType(id: ID!): ProductType
+    productType(category: String!): ProductType
     productTypes: [ProductType!]!
   }
   extend type Mutation {

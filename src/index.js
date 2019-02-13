@@ -3,6 +3,7 @@ import express from 'express'
 import session from 'express-session'
 import connectRedis from 'connect-redis'
 import { ApolloServer } from 'apollo-server-express'
+import cors from 'cors'
 import typeDefs from './typeDefs'
 import resolvers from './resolvers'
 import {
@@ -39,19 +40,23 @@ import {
       store,
       name: SESS_NAME,
       secret: SESS_SECRET,
-      resave: false,
+      resave: true,
+      rolling: true,
       saveUninitialized: false,
       cookie: {
-        maxAge: SESS_LIFETIME,
-        sameSite: true,
-        secure: IN_PROD
+        maxAge: parseInt(SESS_LIFETIME),
+        secure: false
       }
     }))
+
+    const corsOptions = {
+      origin: ['http://localhost:3000', 'http://localhost:8080'],
+      credentials: true,
+    }
 
     const server = new ApolloServer({
       typeDefs,
       resolvers,
-      cors: false,
       playground: IN_PROD ? false : {
         settings: {
           'request.credentials': 'include'
@@ -60,7 +65,7 @@ import {
       context: ({ req, res }) => ({ req, res })
     })
 
-    server.applyMiddleware({ app })
+    server.applyMiddleware({ app, cors: corsOptions })
 
     app.listen({ port: APP_PORT }, () =>
       console.log(`http://localhost:${APP_PORT}${server.graphqlPath}`)

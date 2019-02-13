@@ -8,7 +8,7 @@ export default {
     deleteMessage: async (root, { id }, { req }, info) => {
       // TODO: not auth, validation
       Auth.checkSignedIn(req)
-      return Message.deleteOne({ id })
+      return Message.findOneAndDelete(id)
     },
     addMessage: async (root, args, { req }, info) => {
       // TODO: not auth, validation

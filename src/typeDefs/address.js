@@ -11,7 +11,8 @@ export default gql`
         municipal: String,
         baranggay: String,
         zip: Float!,
-        fee: Float!): Address
+        fee: Float!,
+        isPickUpAvailable: Boolean!): Address
     }
     type Address {
         id: ID!
@@ -20,6 +21,7 @@ export default gql`
         baranggay: String
         zip: Float!
         fee: Float!
+        isPickUpAvailable: Boolean
     }
     type AddressInfo {
         id: ID!
@@ -27,5 +29,6 @@ export default gql`
         municipal: String
         baranggay: String
         zip: Float!
+        isPickUpAvailable: Boolean
     }
 `

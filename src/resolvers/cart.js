@@ -19,18 +19,35 @@ export default {
         productId, quantity, userId: req.session.userId
       }
       await Joi.validate(cartData, myCart, { abortEarly: false })
+
       return Cart.create(cartData)
     },
     deleteToCart: async (root, { id }, { req }, info) => {
       // TODO: not auth, validation
+      console.log(id)
       Auth.checkSignedIn(req)
-      return Cart.deleteOne({ id })
+      return await Cart.findByIdAndRemove(id)
     },
     updateQuantity: async (root, { id, quantity }, { req }, info) => {
       // TODO: not auth, validation
       Auth.checkSignedIn(req)
-      await Cart.findOneAndUpdate(id, { quantity })
-      return true
+      if (quantity === 0) {
+        return Cart.findByIdAndRemove(id)
+      }
+      
+      return Cart.findOneAndUpdate({ _id: id }, { quantity: quantity })
+    }
+  },
+  Query: {
+    cart: async (root, args, {req}, info) => {
+      // console.log(req.session.userId)
+      const userCart = await Cart.find({ userId: req.session.userId })
+      return userCart.map((x) => ({
+        id: `${x.id}`,
+        productId: x.productId,
+        quantity: x.quantity,
+        userId: x.userId
+      }))
     }
   }
 }

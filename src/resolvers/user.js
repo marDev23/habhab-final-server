@@ -7,7 +7,8 @@ import {
   User,
   Message,
   Order,
-  Cart } from '../models'
+  Cart,
+  Address } from '../models'
 import { sender } from '../mail'
 import * as Auth from '../auth'
 
@@ -45,6 +46,9 @@ export default {
         quantity: x.quantity,
         userId: x.userId
       }))
+    },
+    address: async ({address}, args, { req }, info) => {
+     return Address.findById(address)
     }
 
   },
@@ -53,19 +57,29 @@ export default {
       // projection
       Auth.checkSignedIn(req)
       const meData = await User.findById(req.session.userId)
+      // console.log(meData)
       return {
         id: `${meData._id}`,
         name: meData.name,
         email: meData.email,
-        mobile: meData.mobile
+        mobile: meData.mobile,
+        address: meData.address
       }
     },
     users: (root, args, { req }, info) => {
       // TODO: auth, projection, pagination
 
-      Auth.checkSignedIn(req)
+      // Auth.checkSignedIn(req)
 
       return User.find({})
+    },
+    isSignIn: (root, args, { req }, info) => {
+      const sessionUser = req.session.userId
+      if (!sessionUser) {
+        return false
+      }
+      return true
+
     }
 
   },
@@ -98,6 +112,13 @@ export default {
       await sender(mailOptions)
 
       return true
+    },
+    addMoreInfo: async (root, args, { req }, info) => {
+       const userAddress = await User.findOneAndUpdate({ _id: req.session.userId }, { address: args.address })
+        if (!userAddress) {
+          return false
+        }
+        return true
     },
     signIn: async (root, args, { req }, info) => {
       // const { userId } = req.session

@@ -11,9 +11,8 @@ const addressSchema = new mongoose.Schema({
     }
   },
   zip: Number,
-  fee: Number
-}, {
-  timestamps: true
+  fee: Number,
+  isPickUpAvailable: Boolean
 })
 
 addressSchema.pre('save', function (next) {

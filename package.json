@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node -r esm .",
-    "dev": "nodemon -r esm"
+    "dev": "node -r esm ."
   },
   "keywords": [],
   "author": "",
@@ -26,7 +26,7 @@
     "joi": "^14.0.4",
     "joi-date-extensions": "^1.2.0",
     "jsonwebtoken": "^8.4.0",
-    "mongoose": "^5.3.10",
+    "mongoose": "^5.4.8",
     "nodemailer": "^4.7.0",
     "shortid": "^2.2.14"
   }

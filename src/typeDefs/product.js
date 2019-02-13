@@ -2,7 +2,8 @@ import { gql } from 'apollo-server-express'
 
 export default gql`
   extend type Query {
-    product(id: ID!): Product
+    productByCategory(categoryId: ID!): [Product]
+    product(name: String!): Product
     products: [Product!]!
   }
   extend type Mutation {
@@ -22,6 +23,7 @@ export default gql`
     description: String!
   }
   type ProductCart {
+    id: ID!
     name: String!
     description: String!
     price: Float!

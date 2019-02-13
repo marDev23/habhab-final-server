@@ -12,14 +12,14 @@ export default {
 
       return ProductType.find({})
     },
-    productType: (root, { id }, context, info) => {
+    productType: (root, { category }, context, info) => {
       // TODO: auth, projection, sanitization
 
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new UserInputError(`${id} is not a valid user ID.`)
-      }
+      // if (!mongoose.Types.ObjectId.isValid(id)) {
+      //   throw new UserInputError(`${id} is not a valid user ID.`)
+      // }
 
-      return ProductType.findById(id)
+      return ProductType.findOne({ category: category })
     }
 
   },
