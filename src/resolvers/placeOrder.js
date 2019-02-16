@@ -128,6 +128,7 @@ export default {
   },
   Mutation: {
     placeOrder: async (root, args, { req }) => {
+      console.log(args.datePlaced)
       Auth.checkSignedIn(req)
       const { input } = args
 
