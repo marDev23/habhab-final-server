@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: email => User.doesntExist({ email }),
-      message: ({ value }) => `email ${value} has already been taken.` // TODO: security
+      message: ({ value }) => `email has already been taken.` // TODO: security
     }
   },
   name: String,
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: mobile => User.doesntExist({ mobile }),
-      message: ({ value }) => `mobile number ${value} has already taken.`
+      message: ({ value }) => `mobile number has already taken.`
     }
   },
   address: String,
@@ -23,7 +23,9 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  address: String
+  gender: String,
+  address: String,
+  birthday: String,
 }, {
   timestamps: true
 })

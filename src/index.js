@@ -50,7 +50,7 @@ import {
     }))
 
     const corsOptions = {
-      origin: ['http://localhost:3000', 'http://localhost:8080'],
+      origin: ['http://localhost:3000', 'http://localhost:5000', 'http://192.168.43.228:3000', '69.0.3497.100'],
       credentials: true,
     }
 

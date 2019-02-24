@@ -5,6 +5,11 @@ import { address } from '../schemas'
 import { Address } from '../models'
 
 export default {
+  UserMoreInfo: {
+    address: async ({address}, args, context, info) => {
+      return Address.findById(address)
+    }
+  },
   UserInfo: {
     address: async ({ addressId }, args, context, info) => {
       return Address.findById(addressId)

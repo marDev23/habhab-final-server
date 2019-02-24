@@ -19,12 +19,12 @@ export default {
         productId, quantity, userId: req.session.userId
       }
       await Joi.validate(cartData, myCart, { abortEarly: false })
+      const findOneToUpdateCart = Cart.findOne({ productId: productId }, { userId: req.session.userId })
 
       return Cart.create(cartData)
     },
     deleteToCart: async (root, { id }, { req }, info) => {
       // TODO: not auth, validation
-      console.log(id)
       Auth.checkSignedIn(req)
       return await Cart.findByIdAndRemove(id)
     },

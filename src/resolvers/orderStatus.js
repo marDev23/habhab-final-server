@@ -21,7 +21,6 @@ export default {
   Mutation: {
     addOrderStatus: async (root, args, context, info) => {
       // TODO: not auth, validation
-      // console.log(args)
       // await Joi.validate(args, placeOrder, { abortEarly: false })
       return OrderStatus.create(args)
     }

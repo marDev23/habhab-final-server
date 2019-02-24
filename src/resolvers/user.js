@@ -1,5 +1,7 @@
 import Joi from 'joi'
 import jwt from 'jsonwebtoken'
+import { UserInputError } from 'apollo-server-express'
+import { hash, compare } from 'bcryptjs'
 // import { UserInputError } from 'apollo-server-express'
 import { signUp, signIn } from '../schemas'
 import { JWT_EMAIL, MAIL_ADDRESS } from '../config'
@@ -80,6 +82,16 @@ export default {
       }
       return true
 
+    },
+    meMore: async (root, args, { req }, info) => {
+      const userMoreInfo = await User.findById(req.session.userId)
+      // console.log(userMoreInfo)
+      return {
+        id: `${userMoreInfo.id}`,
+        address: userMoreInfo.address,
+        gender: userMoreInfo.gender,
+        birthday: userMoreInfo.birthday
+      }
     }
 
   },
@@ -90,35 +102,24 @@ export default {
       Auth.checkSignedOut(req)
 
       await Joi.validate(args, signUp, { abortEarly: false })
-
       const user = await User.create(args)
-
-      const token = await jwt.sign({
-        email: user.email,
-        id: user.id
-      },
-      JWT_EMAIL,
-      {
-        expiresIn: '1d'
-      })
-
-      console.log(token)
-      const mailOptions = {
-        from: MAIL_ADDRESS,
-        to: user.email,
-        subject: 'Confirm Your Email.',
-        html: `<p>Please confirm your email follow this link .. ${token}</p>`
-      }
-      await sender(mailOptions)
 
       return true
     },
     addMoreInfo: async (root, args, { req }, info) => {
-       const userAddress = await User.findOneAndUpdate({ _id: req.session.userId }, { address: args.address })
-        if (!userAddress) {
-          return false
+      // console.log(args.birthday)
+       const userMoreData = await User.findOneAndUpdate({ _id: req.session.userId }, {
+        address: args.address,
+        gender: args.gender,
+        birthday: `${args.birthday}`
+       })
+       console.log(userMoreData)
+        return {
+          id: `${userMoreData._id}`,
+          address: userMoreData.address,
+          gender: userMoreData.gender,
+          birthday: userMoreData.birthday
         }
-        return true
     },
     signIn: async (root, args, { req }, info) => {
       // const { userId } = req.session
@@ -146,6 +147,24 @@ export default {
         if (err) return false
       })
       return true
+    },
+    updateBasicInfo: async (rot, args, { req }, info ) => {
+      const userBasicInfo = await User.findOneAndUpdate({ _id: req.session.userId}, args)
+      return userBasicInfo
+    },
+    changePassword: async (root, { newPassword, oldPassword }, { req }, info) => {
+      Auth.checkSignedIn(req)
+      const findUserPass = await User.findById(req.session.userId)
+      const comparePass = await compare(oldPassword, findUserPass.password)
+      if (comparePass === true) {
+        const hashToUpdate = await hash(newPassword, 10)
+        await User.findOneAndUpdate({ _id: req.session.userId }, { password: hashToUpdate })
+        return true
+      }
+      // const hashToUpdate = await hash(args.password, 10)
+      // const changeActionP = await User.findOneAndUpdate({ _id: req.session.userId }, { password: hashToUpdate })
+      // console.log(changeActionP)
+      throw new UserInputError('Error changing password. Make sure you input password correct!')
     }
   }
 }

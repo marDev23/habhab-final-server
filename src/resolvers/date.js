@@ -7,7 +7,6 @@ export default {
     name: 'Date',
     description: 'Date custom scalar type',
     parseValue (value) {
-      console.log(value)
       return dayjs(value)
     },
     serialize (value) {

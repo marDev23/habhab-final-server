@@ -4,6 +4,11 @@ import { myMessage } from '../schemas'
 import * as Auth from '../auth'
 
 export default {
+  Query: {
+    message: async (root, { id }, context, info) => {
+      return Message.findById(id)
+    }
+  },
   Mutation: {
     deleteMessage: async (root, { id }, { req }, info) => {
       // TODO: not auth, validation

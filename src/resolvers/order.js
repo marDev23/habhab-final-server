@@ -16,7 +16,6 @@ export default {
   Mutation: {
     placeOrder: async (root, args, context, info) => {
       // TODO: not auth, validation
-    //   console.log(args)
       await Joi.validate(args, placeOrder, { abortEarly: false })
       return Order.create(args)
     }

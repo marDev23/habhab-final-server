@@ -33,7 +33,6 @@ export default {
   Mutation: {
     createProduct: async (root, args, { req }, info) => {
       // TODO: not auth, validation
-    //   console.log(args)
       Auth.checkSignedIn(req)
       await Joi.validate(args, createProduct, { abortEarly: false })
 

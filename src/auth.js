@@ -5,7 +5,7 @@ import { SESS_NAME, JWT_EMAIL, MAIL_ADDRESS } from './config'
 // import { transporter } from './mail'
 
 export const attemptSignIn = async (email, password) => {
-  const message = 'incorrect email or password. please try again.'
+  const message = 'Incorrect email or password. Please try again.'
   const user = await User.findOne({ email })
 
   if (!user || !await user.matchesPassword(password)) {
@@ -42,13 +42,13 @@ const signedIn = req => req.session.userId
 
 export const checkSignedIn = req => {
   if (!signedIn(req)) {
-    throw new AuthenticationError('you must be signed in.')
+    throw new AuthenticationError('You must be signed in.')
   }
 }
 
 export const checkSignedOut = req => {
   if (signedIn(req)) {
-    throw new AuthenticationError('you must be signed out.')
+    throw new AuthenticationError('You must be signed out.')
   }
 }
 
