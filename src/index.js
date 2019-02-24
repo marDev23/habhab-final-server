@@ -21,7 +21,6 @@ import {
 (async () => {
   try {
     await mongoose.connect('mongodb+srv://habhab-user:23Six907@habhab-fr4kc.mongodb.net/test?retryWrites=true')
-    )
 // mongodb+srv://habhab-user:<PASSWORD>@habhab-fr4kc.mongodb.net/test?retryWrites=true
 // mongoose.connect(`mongodb://${DB_HOST}/${DB_NAME}`,{ useNewUrlParser: true }
     const app = express()
