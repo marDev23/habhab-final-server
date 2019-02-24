@@ -99,7 +99,7 @@ export default {
     signUp: async (root, args, { req }, info) => {
       // TODO: not auth, validation
 
-      Auth.checkSignedOut(req)
+      // Auth.checkSignedOut(req)
 
       await Joi.validate(args, signUp, { abortEarly: false })
       const user = await User.create(args)
