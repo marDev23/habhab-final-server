@@ -9,6 +9,10 @@ const orderSchema = new mongoose.Schema({
   isOpened: {
     type: Boolean,
     default: false
+  },
+  acknowledgeBy: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true

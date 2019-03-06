@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import shortid from 'shortid'
 // import mongoose from 'mongoose'
-// import { UserInputError } from 'apollo-server-express'
+import { UserInputError } from 'apollo-server-express'
 import {
   order,
   items,
@@ -20,7 +20,8 @@ import {
   OrderStatus,
   Product,
   ItemStatus,
-  Address } from '../models'
+  Address,
+  Admin } from '../models'
 // import { transporter } from '../mail'
 // import { MAIL_ADDRESS } from '../config'
 import { placeOrderMail } from '../mail-template'
@@ -72,25 +73,25 @@ export default {
   },
   OrderItem: {
     itemStatus: ({ itemStatusId }, args, { req }, info) => {
-      Auth.checkSignedIn(req)
+      // Auth.checkSignedIn(req)
       return ItemStatus.findById(itemStatusId)
     },
     product: ({ productId }, args, { req }, info) => {
-      Auth.checkSignedIn(req)
+      // Auth.checkSignedIn(req)
       return Product.findById(productId)
     }
   },
   Order: {
     orderStatus: ({ orderStatusId }, args, { req }, info) => {
-      Auth.checkSignedIn(req)
+      // Auth.checkSignedIn(req)
       return OrderStatus.findById(orderStatusId)
     },
     orderType: ({ orderTypeId }, args, { req }, info) => {
-      Auth.checkSignedIn(req)
+      // Auth.checkSignedIn(req)
       return OrderType.findById(orderTypeId)
     },
     orderItems: ({ id }, args, { req }, info) => {
-      Auth.checkSignedIn(req)
+      // Auth.checkSignedIn(req)
       return OrderItem.find({ orderId: id })
     },
     orderShipment: async ({ id }, args, context, info) => {
@@ -106,13 +107,20 @@ export default {
     },
     customer: async ({ customerId }, args, context, info) => {
       return User.findById(customerId)
+    },
+    acknowledgeBy: async (root, args, context, info) => {
+      // console.log(root)
+      if (root.acknowledgeBy === '') {
+        return ''
+      }
+      return Admin.findById(root.acknowledgeBy)
     }
   },
   Query: {
     orders: async () => {
       const resOrders = await Order.find({})
-      return resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp }) => ({
-        id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp
+      return resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy }) => ({
+        id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy
       }))
     },
     order: async (root, args, context, info) => {
@@ -177,6 +185,14 @@ export default {
       await placeOrderMail(finalUser, orderId, args)
 
       return { number: orderId }
+    },
+    updateOrderStatus: async (root, args, { req }, info) => {
+      console.log(args)
+      const updateSingleOrder = await Order.findOneAndUpdate({ _id: args.order }, { acknowledgeBy: req.session.userId, orderStatusId: args.orderStatus })
+      if (updateSingleOrder) {
+        return 'Successfully Updated'
+      }
+      throw new UserInputError('Error updating order')
     }
   }
 }

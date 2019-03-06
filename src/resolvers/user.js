@@ -11,7 +11,7 @@ import {
   Order,
   Cart,
   Address } from '../models'
-import { sender } from '../mail'
+import { changePasswordMail } from '../mail-template'
 import * as Auth from '../auth'
 
 export default {
@@ -99,7 +99,7 @@ export default {
     signUp: async (root, args, { req }, info) => {
       // TODO: not auth, validation
 
-      // Auth.checkSignedOut(req)
+      Auth.checkSignedOut(req)
 
       await Joi.validate(args, signUp, { abortEarly: false })
       const user = await User.create(args)
@@ -113,7 +113,7 @@ export default {
         gender: args.gender,
         birthday: `${args.birthday}`
        })
-       console.log(userMoreData)
+       console.log(`${userMoreData._id}`)
         return {
           id: `${userMoreData._id}`,
           address: userMoreData.address,
@@ -165,6 +165,24 @@ export default {
       // const changeActionP = await User.findOneAndUpdate({ _id: req.session.userId }, { password: hashToUpdate })
       // console.log(changeActionP)
       throw new UserInputError('Error changing password. Make sure you input password correct!')
+    },
+    changeForgotten: async (root, args, context, info) => {
+      const findUserId = await User.findOne({ email: args.email })
+      // console.log(findUserId)
+      const changePassJWT = jwt.sign({ userId: `${findUserId._id}` }, JWT_EMAIL, { expiresIn: '24h' })
+      console.log(changePassJWT)
+      await changePasswordMail(findUserId.email, findUserId.name, changePassJWT)
+      return 'Successfully sent mail'
+    },
+    verifyForgotten: async (root, args, context, info) => {
+      const jwtVerifyData = await jwt.verify(args.token, JWT_EMAIL)
+      const { userId } = jwtVerifyData
+      const hashForgotPass = await hash(args.newPassword, 10)
+      const updatePassword = await User.findOneAndUpdate({ _id: userId }, { password: hashForgotPass })
+      if (updatePassword) {
+        return 'Successfully updated password.'
+      }
+      throw new UserInputError('Error updating password.')
     }
   }
 }

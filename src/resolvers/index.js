@@ -9,10 +9,13 @@ import address from './address'
 import cart from './cart'
 import message from './message'
 import date from './date'
+import upload from './upload'
+import admin from './admin'
 
 export default [
   
   user,
+  admin,
   product,
   orderType,
   itemStatus,
@@ -23,4 +26,6 @@ export default [
   cart,
   message,
   date,
+  upload
+ 
 ]

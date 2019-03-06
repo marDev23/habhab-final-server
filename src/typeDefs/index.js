@@ -9,6 +9,7 @@ import address from './address'
 import placeOrder from './placeOrder'
 import cart from './cart'
 import message from './message'
+import admin from './admin'
 
 export default [
   root,
@@ -21,5 +22,6 @@ export default [
   address,
   placeOrder,
   cart,
-  message
+  message,
+  admin
 ]

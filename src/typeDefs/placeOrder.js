@@ -42,6 +42,7 @@ export default gql`
     orderInvoice: OrderInvoice
     orderShipment: OrderShipment
     orderItems: [OrderItem]
+    acknowledgeBy: Admin
   }
   type OrderData {
     id: ID!
@@ -75,5 +76,6 @@ export default gql`
     datePickUp: Date,
     addressId: ID!
     input: [OrderItemInput]): OrderNumber
+    updateOrderStatus(order: ID!, orderStatus: ID!): String
   }
 `
