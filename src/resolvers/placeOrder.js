@@ -188,7 +188,7 @@ export default {
     },
     updateOrderStatus: async (root, args, { req }, info) => {
       console.log(args)
-      const updateSingleOrder = await Order.findOneAndUpdate({ _id: args.order }, { acknowledgeBy: req.session.userId, orderStatusId: args.orderStatus })
+      const updateSingleOrder = await Order.findOneAndUpdate({ _id: args.order }, { orderStatusId: args.orderStatus })
       if (updateSingleOrder) {
         return 'Successfully Updated'
       }
