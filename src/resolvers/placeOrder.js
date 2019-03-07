@@ -194,7 +194,7 @@ export default {
       throw new UserInputError('Error updating order status')
     },
     updateItemStatus: async (root, args, context, info) => {
-      const updateSingleOrderItem = await OrderItem.findOneAndUpdate({ orderId: args.order }, { itemStatusId: args.itemStatus })
+      const updateSingleOrderItem = await OrderItem.findOneAndUpdate({ _id: args.order }, { itemStatusId: args.itemStatus })
       if (updateSingleOrderItem) {
         return 'Successfully Updated'
       }
