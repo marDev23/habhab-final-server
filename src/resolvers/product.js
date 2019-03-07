@@ -40,8 +40,7 @@ export default {
 
       return Product.create(args)
     },
-    singleUpload: async (root, { file }, context, info) => {
-      console.log(file)
+    singleUpload: async (root, args, context, info) => {
       const storeUpload = ({ stream, filename }) => 
         new Promise((resolve, reject) => 
           stream
@@ -50,7 +49,10 @@ export default {
             .on("error", reject)
         )
       
-      const { stream, filename, mimetype, encoding } = await file
+      // const { stream, filename, mimetype, encoding } = await file
+      // console.log(stream, filename)
+      const logFile = await args
+      console.log(logFile)
       await storeUpload({ stream, filename })
       return true
 

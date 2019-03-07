@@ -187,12 +187,18 @@ export default {
       return { number: orderId }
     },
     updateOrderStatus: async (root, args, { req }, info) => {
-      console.log(args)
       const updateSingleOrder = await Order.findOneAndUpdate({ _id: args.order }, { orderStatusId: args.orderStatus })
       if (updateSingleOrder) {
         return 'Successfully Updated'
       }
-      throw new UserInputError('Error updating order')
+      throw new UserInputError('Error updating order status')
+    },
+    updateItemStatus: async (root, args, context, info) => {
+      const updateSingleOrderItem = await OrderItem.findOneAndUpdate({ orderId: args.order }, { itemStatusId: args.itemStatus })
+      if (updateSingleOrderItem) {
+        return 'Successfully Updated'
+      }
+      throw new UserInputError('Error updating item status')
     }
   }
 }

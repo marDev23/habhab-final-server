@@ -77,5 +77,6 @@ export default gql`
     addressId: ID!
     input: [OrderItemInput]): OrderNumber
     updateOrderStatus(order: ID!, orderStatus: ID!): String
+    updateItemStatus(order: ID!, itemStatus: ID!): String
   }
 `
