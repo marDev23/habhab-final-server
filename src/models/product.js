@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema({
     // ref: 'User',
 
   },
+  img: String,
   code: {
     type: String,
     validate: {

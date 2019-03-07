@@ -16,11 +16,12 @@ export default gql`
   }
   extend type Mutation {
     singleUpload(file: Upload): Boolean
-    createProduct(categoryId: ID!, code: String!, name: String!, price: Float, description: String!): Product
+    createProduct(categoryId: ID!, img: String!, code: String!, name: String!, price: Float, description: String!): Product
   }
   type Product {
     id: ID!
     category: ProductType!
+    img: String!
     code: String!
     name: String!
     price: Float!
