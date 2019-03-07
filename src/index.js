@@ -34,6 +34,8 @@ import {
       port: REDIS_PORT
     })
 
+    app.use('/images', express.static(__dirname + '/images'))
+
     app.use(session({
       store,
       name: SESS_NAME,

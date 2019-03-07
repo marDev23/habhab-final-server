@@ -1,11 +1,13 @@
 import { gql } from 'apollo-server-express'
 
 export default gql`
+
   type File {
     filename: String!
     mimetype: String!
     encoding: String!
   }
+  
   extend type Query {
     uploads: [File]
     productByCategory(categoryId: ID!): [Product]
@@ -13,7 +15,7 @@ export default gql`
     products: [Product!]!
   }
   extend type Mutation {
-    singleUpload(file: Upload!): File!
+    singleUpload(file: Upload): Boolean
     createProduct(categoryId: ID!, code: String!, name: String!, price: Float, description: String!): Product
   }
   type Product {

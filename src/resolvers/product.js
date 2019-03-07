@@ -5,6 +5,7 @@ import { createProduct } from '../schemas'
 import { Product, ProductType } from '../models'
 import * as Auth from '../auth'
 
+
 export default {
   Product: {
     category: ({ categoryId }, args, context, info) => {
@@ -37,6 +38,29 @@ export default {
       await Joi.validate(args, createProduct, { abortEarly: false })
 
       return Product.create(args)
+    },
+    singleUpload: async (root, { file }, context, info) => {
+      console.log(file)
+      const storeUpload = ({ stream, filename }) => 
+        new Promise((resolve, reject) => 
+          stream
+            .pipe(createWriteStream(filename))
+            .on("finish", () => resolve())
+            .on("error", reject)
+        )
+      
+      const { stream, filename, mimetype, encoding } = await file
+      await storeUpload({ stream, filename })
+      return true
+
+      // 1. Validate file metadata.
+
+      // 2. Stream file contents into cloud storage:
+      // https://nodejs.org/api/stream.html
+
+      // 3. Record the file upload in your DB.
+      // const id = await recordFile( … )
+
     }
   }
 }
