@@ -84,6 +84,7 @@ export default {
   Order: {
     orderStatus: ({ orderStatusId }, args, { req }, info) => {
       // Auth.checkSignedIn(req)
+      console.log(orderStatusId)
       return OrderStatus.findById(orderStatusId)
     },
     orderType: ({ orderTypeId }, args, { req }, info) => {
@@ -119,9 +120,11 @@ export default {
   Query: {
     orders: async () => {
       const resOrders = await Order.find({})
-      return resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy, orderStatusId }) => ({
+      const ordersArray = resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy, orderStatusId }) => ({
         id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy, orderStatusId
       }))
+      console.log(ordersArray)
+      return ordersArray
     },
     order: async (root, args, context, info) => {
       // console.log(args.id)
