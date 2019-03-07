@@ -119,8 +119,8 @@ export default {
   Query: {
     orders: async () => {
       const resOrders = await Order.find({})
-      return resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy }) => ({
-        id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy
+      return resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy, orderStatusId }) => ({
+        id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy, orderStatusId
       }))
     },
     order: async (root, args, context, info) => {
