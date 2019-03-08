@@ -50,7 +50,7 @@ import {
     }))
 
     const corsOptions = {
-      origin: ['http://localhost:3000', 'http://localhost:5000', 'http://habhab.biz', 'http://www.habhab.biz'],
+      origin: ['http://localhost:3000', 'http://localhost:5000', 'http://habhab.biz', 'http://www.habhab.biz', 'http://localhost:7000'],
       credentials: true,
     }
 

@@ -202,6 +202,23 @@ export default {
         return 'Successfully Updated'
       }
       throw new UserInputError('Error updating item status')
+    },
+    cancelOrder: async (root, args, context, info) => {
+      const orderStatus = {
+        id: "5c8187b187508328989aae40",
+        status: "cancelled"
+      }
+      const itemStatus = {
+        id: "5c81827287508328989aae3c",
+        status: "cancelled"
+      }
+      const updatedOrderStatus = await Order.findOneAndUpdate({ _id: args.order }, { orderStatusId: orderStatus.id })
+      const updatedItemStatus = await OrderItem.updateMany({ orderId: args.order }, { itemStatusId: itemStatus.id })
+
+      if (updatedOrderStatus && updatedItemStatus) {
+        return 'Successfully cancelled order.'
+      }
+      throw new UserInputError('Error cancelling order')
     }
   }
 }

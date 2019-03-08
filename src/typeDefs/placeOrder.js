@@ -78,5 +78,6 @@ export default gql`
     input: [OrderItemInput]): OrderNumber
     updateOrderStatus(order: ID!, orderStatus: ID!): String
     updateItemStatus(order: ID!, itemStatus: ID!): String
+    cancelOrder(order: ID!): Boolean
   }
 `
