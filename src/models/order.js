@@ -10,10 +10,7 @@ const orderSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  acknowledgeBy: {
-    type: String,
-    default: ''
-  }
+  deliveryMan: String 
 }, {
   timestamps: true
 })

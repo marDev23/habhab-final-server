@@ -11,6 +11,7 @@ import message from './message'
 import date from './date'
 import upload from './upload'
 import admin from './admin'
+import delivery from './delivery'
 
 export default [
   
@@ -26,6 +27,7 @@ export default [
   cart,
   message,
   date,
-  upload
+  upload,
+  delivery
  
 ]

@@ -10,6 +10,7 @@ import placeOrder from './placeOrder'
 import cart from './cart'
 import message from './message'
 import admin from './admin'
+import delivery from './delivery'
 
 export default [
   root,
@@ -23,5 +24,6 @@ export default [
   placeOrder,
   cart,
   message,
-  admin
+  admin,
+  delivery
 ]

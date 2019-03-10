@@ -42,7 +42,7 @@ export default gql`
     orderInvoice: OrderInvoice
     orderShipment: OrderShipment
     orderItems: [OrderItem]
-    acknowledgeBy: Admin
+    deliveryMan: Delivery
   }
   type OrderData {
     id: ID!
@@ -78,6 +78,8 @@ export default gql`
     input: [OrderItemInput]): OrderNumber
     updateOrderStatus(order: ID!, orderStatus: ID!): String
     updateItemStatus(order: ID!, itemStatus: ID!): String
+    deliveredOrder(order: ID! deliveryId: ID!): String
+    addDelivery(order: ID!, deliveryId: ID!): String
     cancelOrder(order: ID!): String
   }
 `

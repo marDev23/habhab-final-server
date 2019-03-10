@@ -21,7 +21,8 @@ import {
   Product,
   ItemStatus,
   Address,
-  Admin } from '../models'
+  Admin,
+  Delivery } from '../models'
 // import { transporter } from '../mail'
 // import { MAIL_ADDRESS } from '../config'
 import { placeOrderMail } from '../mail-template'
@@ -109,7 +110,7 @@ export default {
     customer: async ({ customerId }, args, context, info) => {
       return User.findById(customerId)
     },
-    acknowledgeBy: async (root, args, context, info) => {
+    deliveryMan: async (root, args, context, info) => {
       // console.log(root)
       if (root.acknowledgeBy === '') {
         return ''
@@ -120,8 +121,8 @@ export default {
   Query: {
     orders: async () => {
       const resOrders = await Order.find({})
-      const ordersArray = resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy, orderStatusId }) => ({
-        id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp, acknowledgeBy, orderStatusId
+      const ordersArray = resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, deliveryMan, orderStatusId }) => ({
+        id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp, deliveryMan, orderStatusId
       }))
       console.log(ordersArray)
       return ordersArray
@@ -219,6 +220,32 @@ export default {
         return 'Successfully cancelled order.'
       }
       throw new UserInputError('Error cancelling order')
+    },
+    deliveredOrder: async (root, args, context, info) => {
+      const orderStatus = {
+        id: "5c81879c87508328989aae3f",
+        status: "delivered"
+      }
+      const itemStatus = {
+        id: "5c81796287508328989aae3a",
+        status: "delivered"
+      }
+
+      const waitOrderUpdate = await Order.findOneAndUpdate({ _id: args.order }, { orderStatusId: orderStatus.id })
+      const waitItemUpdate = await OrderItem.updateMany({ orderId: args.order }, { itemStatusId: itemStatus.id })
+      const waitDeliveryUpdate = await Delivery.findOneAndUpdate({ _id: args.deliveryId }, { isAvailable: true })
+
+      if (waitOrderUpdate && waitItemUpdate && waitDeliveryUpdate) {
+        return 'Successfully delivered item.'
+      }
+    },
+    addDelivery: async (root, args, context, info) => {
+      const waitAddDelivery = await Order.findOneAndUpdate({ _id: args.order }, { deliveryMan: args.deliveryId })
+      const waitUpdateDelivery = await Delivery.findOneAndUpdate({ _id: args.deliveryId }, { isAvailable: false })
+      if (waitAddDelivery && waitUpdateDelivery) {
+        return 'Successfully added delivery man.'
+      }
+      throw new UserInputError('Error adding delivery man')
     }
   }
 }
