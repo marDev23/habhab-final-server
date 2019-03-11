@@ -111,11 +111,11 @@ export default {
       return User.findById(customerId)
     },
     deliveryMan: async (root, args, context, info) => {
-      // console.log(root)
-      if (root.acknowledgeBy === '') {
+      console.log(root)
+      if (root.deliveryMan === '') {
         return ''
       }
-      return Admin.findById(root.acknowledgeBy)
+      return Admin.findById(root.deliveryMan)
     }
   },
   Query: {
