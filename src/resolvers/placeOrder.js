@@ -115,7 +115,7 @@ export default {
       if (root.deliveryMan === '') {
         return ''
       }
-      return Admin.findById(root.deliveryMan)
+      return Delivery.findById(root.deliveryMan)
     }
   },
   Query: {
