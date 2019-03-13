@@ -9,13 +9,13 @@ export default gql`
   }
   
   extend type Query {
-    uploads: [File]
     productByCategory(categoryId: ID!): [Product]
     product(name: String!): Product
     products: [Product!]!
   }
   extend type Mutation {
-    singleUpload(file: Upload): Boolean
+    singleUpload(file: Upload): File
+    deleteProduct(id: ID!): String
     createProduct(categoryId: ID!, img: String!, code: String!, name: String!, price: Float, description: String!): Product
   }
   type Product {

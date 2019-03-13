@@ -76,6 +76,7 @@ export default gql`
     datePickUp: Date,
     addressId: ID!
     input: [OrderItemInput]): OrderNumber
+    ordersByDate(from: String, to: String): [Order]
     updateOrderStatus(order: ID!, orderStatus: ID!): String
     updateItemStatus(order: ID!, itemStatus: ID!): String
     deliveredOrder(order: ID! deliveryId: ID!): String

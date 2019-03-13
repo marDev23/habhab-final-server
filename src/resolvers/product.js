@@ -5,6 +5,13 @@ import { createProduct } from '../schemas'
 import { Product, ProductType } from '../models'
 import * as Auth from '../auth'
 
+const storeUpload = ({ stream, filename }) => 
+        new Promise((resolve, reject) => 
+          stream
+            .pipe(createWriteStream(filename))
+            .on("finish", () => resolve())
+            .on("error", reject)
+        )
 
 export default {
   Product: {
@@ -32,29 +39,15 @@ export default {
 
   },
   Mutation: {
-    createProduct: async (root, args, { req }, info) => {
-      // TODO: not auth, validation
-      // console.log(args)
-      // Auth.checkSignedIn(req)
-      // await Joi.validate(args, createProduct, { abortEarly: false })
-
-      return Product.create(args)
-    },
     singleUpload: async (root, args, context, info) => {
-      const storeUpload = ({ stream, filename }) => 
-        new Promise((resolve, reject) => 
-          stream
-            .pipe(createWriteStream(filename))
-            .on("finish", () => resolve())
-            .on("error", reject)
-        )
-      
-      // const { stream, filename, mimetype, encoding } = await file
-      // console.log(stream, filename)
-      const logFile = await args
-      console.log(logFile)
-      await storeUpload({ stream, filename })
-      return true
+      console.log(args)
+      // const { stream, filename, mimetype, encoding } = await args
+      // console.log(stream, filename, mimetype, encoding)
+      // console.log(root, args, context, info)
+      // console.log(rest)
+      // const logFile = await args
+      // console.log(logFile)
+      // return storeUpload({ stream, filename })
 
       // 1. Validate file metadata.
 
@@ -64,6 +57,17 @@ export default {
       // 3. Record the file upload in your DB.
       // const id = await recordFile( … )
 
+    },
+    createProduct: async (root, args, { req }, info) => {
+      return Product.create(args)
+    },
+    deleteProduct: async (root, args, context, info) => {
+      const deletedProduct = await Product.findByIdAndRemove(args.id)
+      if (deleteProduct) {
+        return 'Successfully deleted'
+      }
+      throw new UserInputError('Error deleting products')
     }
+    
   }
 }

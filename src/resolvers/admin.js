@@ -29,6 +29,7 @@ export default {
       const hashAdminPass = await hash(args.password, 10)
       const foundUserDB = await Admin.findOne({ email: args.email }, { password: hashAdminPass })
       // console.log(foundUserDB, `${foundUserDB._id}`)
+      console.log(foundUserDB)
       if (foundUserDB) {
         req.session.userId = `${foundUserDB._id}`
         return true

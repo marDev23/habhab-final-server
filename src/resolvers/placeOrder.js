@@ -85,7 +85,7 @@ export default {
   Order: {
     orderStatus: ({ orderStatusId }, args, { req }, info) => {
       // Auth.checkSignedIn(req)
-      console.log(orderStatusId)
+      // console.log(orderStatusId)
       return OrderStatus.findById(orderStatusId)
     },
     orderType: ({ orderTypeId }, args, { req }, info) => {
@@ -111,7 +111,7 @@ export default {
       return User.findById(customerId)
     },
     deliveryMan: async (root, args, context, info) => {
-      console.log(root)
+      // console.log(root)
       if (root.deliveryMan === '') {
         return ''
       }
@@ -124,7 +124,7 @@ export default {
       const ordersArray = resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, deliveryMan, orderStatusId }) => ({
         id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp, deliveryMan, orderStatusId
       }))
-      console.log(ordersArray)
+      // console.log(ordersArray)
       return ordersArray
     },
     order: async (root, args, context, info) => {
@@ -238,6 +238,7 @@ export default {
       if (waitOrderUpdate && waitItemUpdate && waitDeliveryUpdate) {
         return 'Successfully delivered item.'
       }
+      throw new UserInputError('Error updating for delivered.')
     },
     addDelivery: async (root, args, context, info) => {
       const waitAddDelivery = await Order.findOneAndUpdate({ _id: args.order }, { deliveryMan: args.deliveryId })
@@ -246,6 +247,19 @@ export default {
         return 'Successfully added delivery man.'
       }
       throw new UserInputError('Error adding delivery man')
+    },
+    ordersByDate: async (root, args, context, info) => {
+      // const h = new Date(args.from)
+      // const d = new Date(args.to + "T23:59")
+      // console.log(h.getMinutes(), d.getMinutes())
+      const resOrders = await Order.find({ updatedAt: { $gte: new Date(args.from), $lte: new Date(args.to + "T23:59") } })
+
+      const ordersArray = resOrders.map(({ _id, isOpened, customerId, orderTypeId, datePlaced, datePickUp, deliveryMan, orderStatusId }) => ({
+        id: `${_id}`, isOpened, customerId, orderTypeId, datePlaced, datePickUp, deliveryMan, orderStatusId
+      }))
+
+      // console.log(ordersArray)
+      return ordersArray
     }
   }
 }
