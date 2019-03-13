@@ -1,17 +1,11 @@
 import Joi from 'joi'
 import mongoose from 'mongoose'
 import { UserInputError } from 'apollo-server-express'
+import { createWriteStream } from 'fs'
 import { createProduct } from '../schemas'
 import { Product, ProductType } from '../models'
 import * as Auth from '../auth'
 
-const storeUpload = ({ stream, filename }) => 
-        new Promise((resolve, reject) => 
-          stream
-            .pipe(createWriteStream(filename))
-            .on("finish", () => resolve())
-            .on("error", reject)
-        )
 
 export default {
   Product: {
@@ -36,26 +30,11 @@ export default {
 
       return Product.find({ categoryId: categoryId })
     }
-
   },
   Mutation: {
-    singleUpload: async (root, args, context, info) => {
-      console.log(args)
-      // const { stream, filename, mimetype, encoding } = await args
-      // console.log(stream, filename, mimetype, encoding)
-      // console.log(root, args, context, info)
-      // console.log(rest)
-      // const logFile = await args
-      // console.log(logFile)
-      // return storeUpload({ stream, filename })
-
-      // 1. Validate file metadata.
-
-      // 2. Stream file contents into cloud storage:
-      // https://nodejs.org/api/stream.html
-
-      // 3. Record the file upload in your DB.
-      // const id = await recordFile( … )
+    singleUpload: async (root, { file, ...rest }, context, info) => {
+      const { createReadStream, filename, mimetype } = await file
+      console.log(file, rest, filename)
 
     },
     createProduct: async (root, args, { req }, info) => {

@@ -3,9 +3,6 @@ import express from 'express'
 import session from 'express-session'
 import connectRedis from 'connect-redis'
 import { ApolloServer } from 'apollo-server-express'
-import { graphqlUploadExpress } from 'graphql-upload'
-// import { apolloUploadExpress } from 'apollo-server-express'
-import { apolloUploadExpress } from 'apollo-upload-server'
 import cors from 'cors'
 import typeDefs from './typeDefs'
 import resolvers from './resolvers'
@@ -52,7 +49,6 @@ import {
       }
     }))
 
-
     const corsOptions = {
       origin: ['http://localhost:3000', 'http://localhost:5000', 'http://habhab.biz', 'http://www.habhab.biz', 'http://localhost:7000'],
       credentials: true,
@@ -61,6 +57,7 @@ import {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      uploads: true,
       playground: IN_PROD ? false : {
         settings: {
           'request.credentials': 'include'
