@@ -2,10 +2,18 @@ import Joi from 'joi'
 import mongoose from 'mongoose'
 import { UserInputError } from 'apollo-server-express'
 import { createWriteStream } from 'fs'
+// import { processRequest } from 'graphql-upload'
 import { createProduct } from '../schemas'
 import { Product, ProductType } from '../models'
 import * as Auth from '../auth'
 
+const storeUpload = ({ stream, filename }) =>
+  new Promise((resolve, reject) =>
+    stream
+      .pipe(createWriteStream(filename))
+      .on("finish", () => resolve())
+      .on("error", reject)
+  )
 
 export default {
   Product: {
@@ -32,10 +40,10 @@ export default {
     }
   },
   Mutation: {
-    singleUpload: async (root, { file, ...rest }, context, info) => {
+    singleUpload: async (root, args, context, info) => {
       const { createReadStream, filename, mimetype } = await file
-      console.log(file, rest, filename)
-
+      const stream = createReadStream()
+      const promiseFile = await storeUpload({ stream, filename })
     },
     createProduct: async (root, args, { req }, info) => {
       return Product.create(args)

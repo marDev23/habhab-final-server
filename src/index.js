@@ -57,16 +57,10 @@ import {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
-      uploads: true,
-      playground: IN_PROD ? false : {
-        settings: {
-          'request.credentials': 'include'
-        }
-      },
       context: ({ req, res }) => ({ req, res }),
     })
 
-    server.applyMiddleware({ app, cors: corsOptions })
+    server.applyMiddleware({ cors: corsOptions, app })
 
     app.listen({ port: APP_PORT }, () =>
       console.log(`http://localhost:${APP_PORT}${server.graphqlPath}`)
